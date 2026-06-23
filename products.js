@@ -37,10 +37,17 @@ function renderProducts() {
 function openProductForm() {
     document.getElementById('product-form-container').classList.remove('hidden');
     document.getElementById('product-form-title').innerText = "Novo Produto";
+    
     document.getElementById('prod-code').value = "";
     document.getElementById('prod-name').value = "";
     document.getElementById('prod-price').value = "";
     document.getElementById('prod-desc').value = "";
+    
+    // Limpando os novos campos para não carregar lixo do produto anterior
+    if (document.getElementById('prod-category')) document.getElementById('prod-category').value = "";
+    if (document.getElementById('prod-var')) document.getElementById('prod-var').value = "";
+    if (document.getElementById('prod-qtd')) document.getElementById('prod-qtd').value = "";
+    
     currentImages = [];
     renderImgTags();
 }
@@ -59,8 +66,16 @@ function editProduct(index) {
     document.getElementById('prod-desc').value = row[2] || '';
     document.getElementById('prod-code').value = row[3] || '';
     
-   currentImages = row[4] ? row[4].toString().split(',').filter(x => x.trim() !== '') : [];
+    // Carregando as informações de variação, categoria e quantidade que estavam esquecidas
+    if (document.getElementById('prod-category')) document.getElementById('prod-category').value = row[5] || '';
+    if (document.getElementById('prod-var')) document.getElementById('prod-var').value = row[6] || '';
+    if (document.getElementById('prod-qtd')) document.getElementById('prod-qtd').value = row[7] || '';
+    
+    currentImages = row[4] ? row[4].toString().split(',').filter(x => x.trim() !== '') : [];
     renderImgTags();
+    
+    // Rolagem suave para o topo
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function formatDescription(startTag, endTag = null) {
@@ -70,8 +85,23 @@ function formatDescription(startTag, endTag = null) {
     const sel = textarea.value.substring(start, end);
     const wrapEnd = endTag ? endTag : startTag;
     
-    textarea.value = textarea.value.substring(0, start) + startTag + sel + wrapEnd + textarea.value.substring(end);
+    const before = textarea.value.substring(0, start);
+    const after = textarea.value.substring(end);
+    
+    // Envolve o texto selecionado (se houver) com as tags do markdown
+    textarea.value = before + startTag + sel + wrapEnd + after;
+    
+    // Mantém o foco no campo de texto para não atrapalhar a digitação
     textarea.focus();
+    
+    // Posiciona o cursor de forma inteligente
+    if (sel.length > 0) {
+        // Se tinha texto selecionado, mantém o miolo selecionado
+        textarea.setSelectionRange(start + startTag.length, start + startTag.length + sel.length);
+    } else {
+        // Se não tinha nada selecionado, coloca o cursor exatamente entre as duas tags
+        textarea.setSelectionRange(start + startTag.length, start + startTag.length);
+    }
 }
 
 async function uploadSelectedFile() {
@@ -90,7 +120,6 @@ async function uploadSelectedFile() {
         const base64 = reader.result.split(',')[1];
         
         try {
-            // REMOVIDO: mode: "no-cors"
             const response = await fetch(API_URL, {
                 method: "POST",
                 body: JSON.stringify({
@@ -142,12 +171,16 @@ async function saveProduct() {
     const codeObj = document.getElementById('prod-code').value;
     const isEdit = codeObj !== "";
     
-   const payload = {
+    // Agora o payload pega TODOS os campos da tela
+    const payload = {
         productname: document.getElementById('prod-name').value,
         price: document.getElementById('prod-price').value,
         description: document.getElementById('prod-desc').value,
         code: isEdit ? codeObj : 'PRD' + Math.random().toString(36).substr(2, 6).toUpperCase(),
-        img: currentImages.join(',')
+        img: currentImages.join(','),
+        category: document.getElementById('prod-category') ? document.getElementById('prod-category').value : '',
+        var: document.getElementById('prod-var') ? document.getElementById('prod-var').value : '',
+        qtd: document.getElementById('prod-qtd') ? document.getElementById('prod-qtd').value : ''
     };
 
     try {
