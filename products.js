@@ -54,12 +54,12 @@ function editProduct(index) {
     document.getElementById('product-form-container').classList.remove('hidden');
     document.getElementById('product-form-title').innerText = "Editar Produto";
     
-    document.getElementById('prod-name').value = row[0];
-    document.getElementById('prod-price').value = row[1];
-    document.getElementById('prod-desc').value = row[2];
-    document.getElementById('prod-code').value = row[3];
+    document.getElementById('prod-name').value = row[0] || '';
+    document.getElementById('prod-price').value = row[1] || '';
+    document.getElementById('prod-desc').value = row[2] || '';
+    document.getElementById('prod-code').value = row[3] || '';
     
-    currentImages = row[4] ? row[4].toString().split(',').filter(x => x.trim() !== '') : [];
+   currentImages = row[4] ? row[4].toString().split(',').filter(x => x.trim() !== '') : [];
     renderImgTags();
 }
 
@@ -142,7 +142,7 @@ async function saveProduct() {
     const codeObj = document.getElementById('prod-code').value;
     const isEdit = codeObj !== "";
     
-    const payload = {
+   const payload = {
         productname: document.getElementById('prod-name').value,
         price: document.getElementById('prod-price').value,
         description: document.getElementById('prod-desc').value,
