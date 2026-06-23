@@ -11,19 +11,22 @@ function renderProducts() {
 
     for (let i = 1; i < globalData.products.length; i++) {
         const row = globalData.products[i];
-        if (!row[3]) continue;
+        if (!row[3]) continue; // code (D) continua no índice 3
 
-        const name = row[0]; // A
-        const price = row[1]; // B
-        const desc = row[2]; // C
-        const code = row[3]; // D
+        const name = row[0];       // A
+        const price = row[1];      // B
+        const desc = row[2];       // C
+        const code = row[3];       // D
+        // img = 4, category = 5, var = 6
+        const qtdEstoque = row[7]; // H (Quantidade)
         
         const card = document.createElement('div');
         card.className = 'data-card';
         card.innerHTML = `
             <h4>${name} (Ref: ${code})</h4>
             <p><strong>Preço:</strong> R$ ${price}</p>
-            <p><strong>Descrição:</strong> ${desc.substring(0, 50)}...</p>
+            <p><strong>Estoque atual:</strong> ${qtdEstoque !== undefined && qtdEstoque !== '' ? qtdEstoque : '0'}</p>
+            <p><strong>Descrição:</strong> ${desc ? desc.substring(0, 50) : ''}...</p>
             <button onclick='editProduct(${i})'>Editar</button>
             <button onclick="deleteProduct('${code}')">Excluir</button>
         `;
