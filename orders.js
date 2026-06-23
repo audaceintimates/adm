@@ -13,12 +13,13 @@ function renderOrders() {
 
         const user = row[0];      // A
         const products = row[1];  // B
-        const address = row[2];   // C
-        const shipping = row[3];  // D
-        const cpf = row[4];       // E
-        const total = row[5];     // F
-        const code = row[6];      // G
-        const status = row[7];    // H
+        const qtd = row[2];       // C
+        const address = row[3];   // D
+        const shipping = row[4];  // E
+        const cpf = row[5];       // F
+        const total = row[6];     // G
+        const code = row[7];      // H
+        const status = row[8];    // I
 
         const card = document.createElement('div');
         card.className = 'data-card';
