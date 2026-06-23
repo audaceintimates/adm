@@ -9,7 +9,9 @@ function renderOrders() {
 
     for (let i = 1; i < globalData.orders.length; i++) {
         const row = globalData.orders[i];
-        if (!row[6]) continue;
+        
+        // Verifica se a linha é válida usando a coluna Code (agora no índice 7 em vez de 6)
+        if (!row[7]) continue;
 
         const user = row[0];      // A
         const products = row[1];  // B
@@ -19,14 +21,27 @@ function renderOrders() {
         const cpf = row[5];       // F
         const total = row[6];     // G
         const code = row[7];      // H
-        const status = row[8];    // I
+        const status = row[8];    // I (Status assumido na última coluna)
+
+        // Mescla a coluna de Produtos com a coluna de Quantidades
+        let listaProdutos = '';
+        if (products) {
+            const prodArr = String(products).split(',');
+            const qtdArr = String(qtd).split(',');
+            
+            // Monta uma lista amigável: "Nome do Produto (xQtd)"
+            listaProdutos = prodArr.map((p, idx) => {
+                const q = qtdArr[idx] ? qtdArr[idx].trim() : '1';
+                return `• ${p.trim()} (x${q})`;
+            }).join('<br>');
+        }
 
         const card = document.createElement('div');
         card.className = 'data-card';
         card.innerHTML = `
             <h4>Pedido: ${code}</h4>
             <p><strong>Cliente:</strong> ${user} (CPF: ${cpf})</p>
-            <p><strong>Produtos:</strong> ${products}</p>
+            <p><strong>Produtos:</strong><br> ${listaProdutos}</p>
             <p><strong>Endereço:</strong> ${address}</p>
             <p><strong>Entrega:</strong> ${shipping}</p>
             <p><strong>Total:</strong> R$ ${total}</p>
