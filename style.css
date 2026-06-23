@@ -1,0 +1,173 @@
+:root {
+    --bg: #ffffff;
+    --text: #000000;
+    --border: #000000;
+    --gray: #f0f0f0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.screen {
+    padding: 20px;
+}
+
+/* Login */
+#login-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-box {
+    border: 2px solid var(--border);
+    padding: 30px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid var(--border);
+}
+
+#login-error {
+    color: red;
+    margin-top: 10px;
+}
+
+/* Headers & Nav */
+header {
+    border-bottom: 2px solid var(--border);
+    padding: 15px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav button {
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+    padding: 8px 12px;
+    margin: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+nav button:hover {
+    background: #000000;
+    color: #ffffff;
+}
+
+/* Forms & Buttons */
+button {
+    background: var(--text);
+    color: var(--bg);
+    border: 1px solid var(--border);
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.btn-primary { margin-bottom: 20px; }
+.btn-cancel { background: var(--bg); color: var(--text); }
+
+.form-box {
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 20px;
+    background: var(--gray);
+}
+
+.form-box label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.form-box input[type="text"], 
+.form-box input[type="number"], 
+.form-box textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border);
+}
+
+.toolbar { margin-bottom: 5px; }
+.toolbar button { padding: 5px 10px; font-size: 12px; }
+
+/* Images Tags */
+.img-paste-area { margin-top: 10px; }
+#img-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px dashed var(--border);
+    min-height: 50px;
+}
+.img-tag {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    padding: 5px;
+    background: var(--bg);
+}
+.img-tag span {
+    font-size: 12px;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+.img-tag button {
+    padding: 2px 5px;
+    font-size: 10px;
+}
+
+/* Lists and Tables (Cards for mobile) */
+.data-card {
+    border: 1px solid var(--border);
+    padding: 15px;
+    margin-bottom: 15px;
+}
+.data-card h4 { margin-bottom: 10px; }
+.data-card p { margin-bottom: 5px; }
+
+.status-dropdown {
+    padding: 5px;
+    border: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+    header { flex-direction: column; text-align: center; }
+    nav { margin-top: 10px; }
+    nav button { width: 100%; margin: 5px 0; }
+}
