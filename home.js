@@ -11,13 +11,13 @@ function renderHome() {
 
     for (let i = 1; i < globalData.orders.length; i++) {
         const row = globalData.orders[i];
-        const status = row[7]; // H
+        const status = row[8]; // I
         
         if (status && status.toString().trim().toLowerCase() === 'pendente') {
             hasPending = true;
             const user = row[0];
-            const total = row[5];
-            const code = row[6];
+            const total = row[6];
+            const code = row[7];
             
             const card = document.createElement('div');
             card.className = 'data-card';
