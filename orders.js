@@ -69,10 +69,10 @@ async function changeOrderStatus(code, newStatus) {
             })
         });
         
-        // Atualiza estado local
+       // Atualiza estado local com os novos índices
         for (let i = 1; i < globalData.orders.length; i++) {
-            if (globalData.orders[i][6] === code) {
-                globalData.orders[i][7] = newStatus;
+            if (globalData.orders[i][7] === code) {  // code agora é índice 7
+                globalData.orders[i][8] = newStatus; // status agora é índice 8
                 break;
             }
         }
