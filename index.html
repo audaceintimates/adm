@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-screen" class="screen active">
+        <div class="login-box">
+            <h2>Admin Login</h2>
+            <input type="password" id="admin-password" placeholder="Digite a senha">
+            <button onclick="authenticate()">Entrar</button>
+            <p id="login-error" class="hidden">Senha incorreta.</p>
+        </div>
+    </div>
+
+    <div id="main-app" class="hidden">
+        <header>
+            <h1>Painel Admin</h1>
+            <nav>
+                <button onclick="navigate('home')">Dashboard</button>
+                <button onclick="navigate('products')">Produtos</button>
+                <button onclick="navigate('orders')">Pedidos</button>
+                <button onclick="navigate('customers')">Clientes</button>
+            </nav>
+        </header>
+        
+        <main>
+            <div id="screen-home" class="screen">
+                <h2>Dashboard - Pedidos Pendentes</h2>
+                <div id="pending-orders-list"></div>
+            </div>
+
+            <div id="screen-products" class="screen hidden">
+                <h2>Gerenciar Produtos</h2>
+                <button onclick="openProductForm()" class="btn-primary">Adicionar Novo Produto</button>
+                
+                <div id="product-form-container" class="hidden form-box">
+                    <h3 id="product-form-title">Novo Produto</h3>
+                    <input type="hidden" id="prod-code">
+                    
+                    <label>Nome do Produto:</label>
+                    <input type="text" id="prod-name">
+                    
+                    <label>Preço:</label>
+                    <input type="number" id="prod-price" step="0.01">
+                    
+                    <label>Descrição:</label>
+                    <div class="toolbar">
+                        <button onclick="formatDescription('**')">Negrito</button>
+                        <button onclick="formatDescription('*')">Itálico</button>
+                        <button onclick="formatDescription('<u>', '</u>')">Sublinhado</button>
+                    </div>
+                    <textarea id="prod-desc" rows="4"></textarea>
+                    
+                    <label>Upload de Imagem (Direto para o Drive):</label>
+<div class="img-upload-area">
+    <input type="file" id="file-input" accept="image/*">
+    <button type="button" onclick="uploadSelectedFile()">Fazer Upload</button>
+    <div id="upload-status"></div>
+    <div id="img-tags-container"></div>
+</div>
+                    
+                    <div class="form-actions">
+                        <button onclick="saveProduct()">Salvar Produto</button>
+                        <button onclick="closeProductForm()" class="btn-cancel">Cancelar</button>
+                    </div>
+                </div>
+
+                <div id="products-list"></div>
+            </div>
+
+            <div id="screen-orders" class="screen hidden">
+                <h2>Gerenciar Pedidos</h2>
+                <div id="orders-list"></div>
+            </div>
+
+            <div id="screen-customers" class="screen hidden">
+                <h2>Lista de Clientes</h2>
+                <div id="customers-list"></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbywasDiwazvQ-_vMJXAJNfWKcMnlbXPBA_XUV4Gnh6eS7AuhYqCejcDNhDvnCSXF4TK3g/exec";
+        let globalData = { products: [], orders: [], users: [] };
+
+        function authenticate() {
+            const pwd = document.getElementById('admin-password').value;
+            if (pwd === '2468101214161820') {
+                document.getElementById('login-screen').classList.remove('active');
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                loadAllData();
+                navigate('home');
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        function navigate(screen) {
+            document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
+            document.getElementById('screen-' + screen).classList.remove('hidden');
+            if (screen === 'home') renderHome();
+            if (screen === 'products') renderProducts();
+            if (screen === 'orders') renderOrders();
+            if (screen === 'customers') renderCustomers();
+        }
+
+        async function loadAllData() {
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'getData' })
+                });
+                const data = await res.json();
+                globalData.products = data.products || [];
+                globalData.orders = data.orders || [];
+                globalData.users = data.users || [];
+                
+                if(!document.getElementById('screen-home').classList.contains('hidden')) renderHome();
+            } catch (err) {
+                console.error("Erro ao carregar dados:", err);
+            }
+        }
+    </script>
+    <script src="home.js"></script>
+    <script src="products.js"></script>
+    <script src="orders.js"></script>
+    <script src="customers.js"></script>
+</body>
+</html>
